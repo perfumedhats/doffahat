@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Doff it, sqwuiah?</title>
+    <!--The google fonts-->
+    <link
+      href="https://fonts.googleapis.com/css?family=Cormorant+Garamond|IM+Fell+DW+Pica"
+      rel="stylesheet"
+    />
+    <script src="doff.js"></script>
+    <script src="underscore-min.js"></script>
+    <link rel="stylesheet" href="/html/main.css" />
+
+    <style>
+      body {
+        cursor: default;
+        background-color: antiquewhite;
+      }
+      .clickable {
+        cursor: pointer !important;
+      }
+      .refinedText {
+        font-family: Cormorant Garamond, cursive;
+        font-size: xx-large;
+        margin-bottom: 30px;
+      }
+      .textButton {
+        display: inline-block;
+        margin-right: 40px;
+
+        cursor: default;
+
+        font-family: IM Fell DW Pica, cursive;
+        font-size: xx-large;
+
+        transition: opacity 3s ease-in;
+
+        user-select: none;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+      }
+      .fade-out {
+        animation: fadeOut 2s forwards;
+      }
+
+      @keyframes fadeOut {
+        from {
+          opacity: 1;
+        }
+        to {
+          opacity: 0;
+        }
+      }
+      .fade-in {
+        animation: fadeIn 2s forwards;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div style="display: flex; justify-content: center">
+      <div style="width: 600px; padding-top: 50px">
+        <div id="screen1" class="refinedText" style="line-height: 50px">
+          <div>
+            <span style="font-size: 60px; color: #a10000">T</span>o the mountain
+            cities of central Europe, adventurers come from across the continent
+            to ride the funiculars (inclined-railways), gain the ear of a king,
+            or trade artisinal wares.<br />
+          </div>
+          <div style="text-indent: 50px">
+            A fresco of people with as many languages and customs as there are
+            stars in the sky. To live in accord, it is the lattice of etiquette
+            that holds society together.
+          </div>
+          <div style="text-indent: 50px">
+            It seems like your future could hinge on knowing when to tip your
+            hat, or lift your nose. Can you navigate the Byantine rules of La
+            Belle Époque?
+          </div>
+          <br />
+          <form autocomplete="off">
+            <label for="promise-checkbox" style="padding-top: 40px">
+              <input
+                type="checkbox"
+                id="promise-checkbox"
+                name="promise"
+                onclick="startGame()"
+              />
+              I will advance my situation through meticulous doffing
+            </label>
+          </form>
+        </div>
+
+        <div id="screen2" style="display: none">
+          <div id="progress" class="refinedText">0/20</div>
+          <div
+            id="question"
+            class="refinedText"
+            style="min-height: 150px"
+          ></div>
+          <div id="doff" class="textButton clickable" onclick="updateText()">
+            Doff it
+          </div>
+          <div
+            id="doNotDoff"
+            class="textButton clickable"
+            onclick="updateText()"
+          >
+            Do not doff
+          </div>
+          <div id="doNothing" class="textButton" style="opacity: 0">
+            Do nothing
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
