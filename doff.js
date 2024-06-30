@@ -1,3 +1,10 @@
+// TODO - Fix how images come up during gameplay
+// TODO - More pictures
+// TODO - fix looping of music?
+// TODO - Downsample images
+// TODO - Expand the people and encounter lists
+// TODO - Code review
+// TODO - Put on-line
 var normalPerson = [
   "a governess pushing a parambulator",
   "an episcopal bishop",
@@ -70,6 +77,7 @@ var sadPerson = [
 var text = [
   {
     counter: 6,
+    allowImages: true,
     preamble: [
       "on the Sabbath",
       "while hunting in Nantes",
@@ -95,6 +103,7 @@ var text = [
   },
   {
     counter: 6,
+    allowImages: true,
     showDoNothing: true,
     preamble: [
       "after a fit of the whistles",
@@ -122,6 +131,7 @@ var text = [
   },
   {
     counter: 8,
+    allowImages: true,
     preamble: [
       "after a fit of the whistles",
       "finding yourself daydreaming,",
@@ -286,16 +296,33 @@ var interruptions = [
 ];
 
 var activeScreen = null;
+var started = false;
 
 function initialize() {
   changeToScreen("screen1");
 }
-function startGame() {
-  changeToScreen("");
-  changeToScreen("screenQuestions", nextScenario);
+function startGame(e) {
+  // Prevent the user from clicking the checkbox twice
+  if (started) {
+    e.preventDefault();
+    e.stopPropagation();
+    return;
+  }
+  started = true;
+
   var audio = new Audio("chopin-waltz-e-minor.mp3");
   audio.loop = true;
   audio.play();
+  showImage();
+}
+
+function showImage() {
+  document.getElementById("gallery").src = _.sample(galleryImages, 1)[0];
+  changeToScreen("screenGallery", function () {
+    setTimeout(function () {
+      changeToScreen("screenQuestions", nextScenario);
+    }, 2000);
+  });
 }
 
 function changeToScreen(id, callback) {
@@ -329,6 +356,12 @@ var galleryImages = [
   "tronk.webp",
 ];
 
+// Preload the images
+galleryImages.forEach((url) => {
+  var img = new Image();
+  img.src = url;
+});
+
 function nextScenario() {
   // Don't allow clicking more than once a second
   // otherwise mucksavage bogmen click too fast and miss the game
@@ -338,11 +371,11 @@ function nextScenario() {
   }
   lastClick = time;
 
+  var act = text[actNum];
+
   if (interruptions.includes(progress)) {
     alert("CAREFUL!");
   }
-
-  var act = text[actNum];
 
   if (!act) {
     endStateCounter++;
@@ -388,7 +421,15 @@ function nextScenario() {
     newText = generateSentence(act);
   }
 
-  updateText(newText);
+  if (
+    !interruptions.includes(progress) &&
+    act.allowImages &&
+    Math.floor(Math.random() * 10) === 0
+  ) {
+    showImage();
+  } else {
+    updateText(newText);
+  }
 }
 
 var generateSentence = function (act) {

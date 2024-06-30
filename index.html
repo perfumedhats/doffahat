@@ -105,12 +105,15 @@
             </div>
             <br />
             <form autocomplete="off">
-              <label for="promise-checkbox" style="cursor: pointer">
+              <label
+                for="promise-checkbox"
+                style="cursor: pointer; user-select: none"
+              >
                 <input
                   type="checkbox"
                   id="promise-checkbox"
                   style="height: 20px; width: 20px"
-                  onclick="startGame()"
+                  onclick="startGame(event)"
                 />
                 I promise to advance my station in life through meticulous
                 doffing
