@@ -121,7 +121,7 @@ var text = [
     ],
   },
   {
-    counter: 9,
+    counter: 8,
     preamble: [
       "after a fit of the whistles",
       "finding yourself daydreaming,",
@@ -174,7 +174,7 @@ var text = [
   },
   {
     counter: 1,
-    preamble: ["reaching the platform just after the doors close"],
+    preamble: ["reaching the funicular platform just after the doors close"],
     encounter: weirdEncounter,
     person: normalPerson,
   },
@@ -270,14 +270,14 @@ function enableButton(elementID) {
   var element = document.getElementById(elementID);
   element.style.opacity = 1;
   element.classList.add("clickable");
-  element.onclick = updateText;
+  element.onclick = nextScenario;
 }
 
 var actNum = 0;
 var progress = 0;
 var endStateCounter = 0;
 var lastClick = 0;
-var delay = 2000;
+const DELAY = 200;
 
 var interruptions = [
   1 + Math.floor(Math.random() * 6),
@@ -285,20 +285,55 @@ var interruptions = [
   13 + Math.floor(Math.random() * 6),
 ];
 
+var activeScreen = null;
+
+function initialize() {
+  changeToScreen("screen1");
+}
 function startGame() {
-  document.getElementById("screen1").classList.add("fade-out");
-  setTimeout(function () {
-    document.getElementById("screen1").style.display = "none";
-    document.getElementById("screen2").style.display = "";
-    document.getElementById("screen2").classList.add("fade-in");
-  }, 2000);
+  changeToScreen("");
+  changeToScreen("screenQuestions", nextScenario);
+  var audio = new Audio("chopin-waltz-e-minor.mp3");
+  audio.loop = true;
+  audio.play();
 }
 
-function updateText() {
+function changeToScreen(id, callback) {
+  if (activeScreen) {
+    activeScreen.classList.remove("fade-in");
+    activeScreen.classList.add("fade-out");
+    setTimeout(fadeIn.bind(this, id, callback), 2000);
+  } else {
+    fadeIn(id, callback);
+  }
+}
+
+function fadeIn(id, callback) {
+  if (activeScreen) {
+    activeScreen.style.display = "none";
+  }
+  activeScreen = document.getElementById(id);
+  activeScreen.style.display = "flex";
+  activeScreen.classList.remove("fade-out");
+  activeScreen.classList.add("fade-in");
+  if (callback) callback();
+}
+
+var galleryImages = [
+  "priest.webp",
+  "rabbi.webp",
+  "slavs.webp",
+  "soldier.webp",
+  "costermonger.webp",
+  "gendarme.webp",
+  "tronk.webp",
+];
+
+function nextScenario() {
   // Don't allow clicking more than once a second
   // otherwise mucksavage bogmen click too fast and miss the game
   var time = Date.now();
-  if (time - lastClick < delay) {
+  if (time - lastClick < DELAY) {
     return;
   }
   lastClick = time;
@@ -310,13 +345,15 @@ function updateText() {
   var act = text[actNum];
 
   if (!act) {
-    delay = 0;
     endStateCounter++;
-    document.getElementById("question").textContent =
-      endStateCounter % 2 ? "You wake up" : "You go to sleep";
+    updateText(endStateCounter % 2 ? "You wake up" : "You go to sleep");
 
-    if (endStateCounter > 3 && endStateCounter <= 13) {
-      document.body.style.opacity = 1 - 0.1 * (endStateCounter - 3);
+    if (endStateCounter > 3 && endStateCounter <= 10) {
+      var step = 1 / (10 - 3);
+      document.body.style.opacity = 1 - step * (endStateCounter - 3);
+    }
+    if (endStateCounter === 10) {
+      document.body.innerHTML = "";
     }
 
     return;
@@ -327,9 +364,10 @@ function updateText() {
 
   progress++;
   var progressEl = document.getElementById("progress");
-  progressEl.textContent = progress + "/20";
-  if (progress > 7 && progress <= 17) {
-    progressEl.style.opacity = 1 - 0.1 * (progress - 7);
+  progressEl.textContent = progress + "/29";
+  if (progress > 21 && progress <= 26) {
+    var step = 1 / (26 - 21);
+    progressEl.style.opacity = 1 - step * (progress - 21);
   }
 
   if (act.showDoNothing) {
@@ -350,13 +388,7 @@ function updateText() {
     newText = generateSentence(act);
   }
 
-  questionEl.classList.remove("fade-in");
-  questionEl.classList.add("fade-out");
-  setTimeout(function () {
-    questionEl.textContent = newText;
-    questionEl.classList.remove("fade-out");
-    questionEl.classList.add("fade-in");
-  }, 2000);
+  updateText(newText);
 }
 
 var generateSentence = function (act) {
@@ -369,6 +401,18 @@ var generateSentence = function (act) {
     });
 };
 
-document.addEventListener("DOMContentLoaded", function () {
-  updateText();
-});
+document.addEventListener("DOMContentLoaded", initialize);
+
+function updateText(text) {
+  var questionEl = document.getElementById("question");
+  questionEl.classList.remove("fade-in");
+  questionEl.classList.add("fade-out");
+  setTimeout(
+    function () {
+      questionEl.textContent = text;
+      questionEl.classList.remove("fade-out");
+      questionEl.classList.add("fade-in");
+    },
+    questionEl.innerHTML === "" ? 0 : DELAY
+  );
+}

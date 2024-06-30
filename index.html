@@ -3,18 +3,19 @@
   <head>
     <meta charset="UTF-8" />
     <title>Doff it, sqwuiah?</title>
-    <!--The google fonts-->
     <link
       href="https://fonts.googleapis.com/css?family=Cormorant+Garamond|IM+Fell+DW+Pica"
       rel="stylesheet"
     />
+    <!-- Music from https://pixabay.com/music/classical-piano-chopin-waltz-in-e-minor-b-56-kk-iva-15-190237/ -->
     <script src="doff.js"></script>
     <script src="underscore-min.js"></script>
     <link rel="stylesheet" href="/html/main.css" />
 
     <style>
       body {
-        cursor: default;
+        padding: 0;
+        margin: 0;
         background-color: antiquewhite;
       }
       .clickable {
@@ -44,6 +45,9 @@
       .fade-out {
         animation: fadeOut 2s forwards;
       }
+      .fade-out-quick {
+        animation: fadeOut 1s forwards;
+      }
 
       @keyframes fadeOut {
         from {
@@ -56,7 +60,9 @@
       .fade-in {
         animation: fadeIn 2s forwards;
       }
-
+      .fade-in-quick {
+        animation: fadeIn 1s forwards;
+      }
       @keyframes fadeIn {
         from {
           opacity: 0;
@@ -69,57 +75,84 @@
   </head>
   <body>
     <div style="display: flex; justify-content: center">
-      <div style="width: 600px; padding-top: 50px">
-        <div id="screen1" class="refinedText" style="line-height: 50px">
-          <div>
-            <span style="font-size: 60px; color: #a10000">T</span>o the mountain
-            cities of central Europe, adventurers come from across the continent
-            to ride the funiculars (inclined-railways), gain the ear of a king,
-            or trade artisinal wares.<br />
-          </div>
-          <div style="text-indent: 50px">
-            A fresco of people with as many languages and customs as there are
-            stars in the sky. To live in accord, it is the lattice of etiquette
-            that holds society together.
-          </div>
-          <div style="text-indent: 50px">
-            It seems like your future could hinge on knowing when to tip your
-            hat, or lift your nose. Can you navigate the Byantine rules of La
-            Belle Époque?
-          </div>
-          <br />
-          <form autocomplete="off">
-            <label for="promise-checkbox" style="padding-top: 40px">
-              <input
-                type="checkbox"
-                id="promise-checkbox"
-                name="promise"
-                onclick="startGame()"
-              />
-              I will advance my situation through meticulous doffing
-            </label>
-          </form>
-        </div>
+      <div>
+        <div
+          id="screen1"
+          class="refinedText"
+          style="line-height: 50px; display: none; padding: 25px"
+        >
+          <img
+            src="funicular.png"
+            style="width: auto; height: calc(100vh - 50px)"
+          />
 
-        <div id="screen2" style="display: none">
-          <div id="progress" class="refinedText">0/20</div>
-          <div
-            id="question"
-            class="refinedText"
-            style="min-height: 150px"
-          ></div>
-          <div id="doff" class="textButton clickable" onclick="updateText()">
-            Doff it
+          <div style="max-width: 600px; padding-left: 50px">
+            <div>
+              <span style="font-size: 60px; color: #a10000">T</span>o the
+              mountain cities of central Europe, adventurers come from across
+              the continent to ride the funiculars (inclined-railways), gain the
+              ear of a king, or trade artisinal wares.<br />
+            </div>
+            <div style="text-indent: 50px">
+              A fresco of people with as many languages and customs as there are
+              stars in the sky. To live in accord, it is the lattice of
+              etiquette that holds society together.
+            </div>
+            <div style="text-indent: 50px">
+              It seems like your future could hinge on knowing when to tip your
+              hat, or lift your nose. Can you navigate the Byantine hat-doffing
+              rules of La Belle Époque?
+            </div>
+            <br />
+            <form autocomplete="off">
+              <label for="promise-checkbox" style="cursor: pointer">
+                <input
+                  type="checkbox"
+                  id="promise-checkbox"
+                  style="height: 20px; width: 20px"
+                  onclick="startGame()"
+                />
+                I promise to advance my station in life through meticulous
+                doffing
+              </label>
+            </form>
           </div>
-          <div
-            id="doNotDoff"
-            class="textButton clickable"
-            onclick="updateText()"
-          >
-            Do not doff
-          </div>
-          <div id="doNothing" class="textButton" style="opacity: 0">
-            Do nothing
+        </div>
+        <div id="screenGallery" style="padding: 25px; display: none">
+          <img
+            id="gallery"
+            src="priest.webp"
+            style="width: auto; height: calc(100vh - 50px)"
+          />
+        </div>
+        <div
+          id="screenQuestions"
+          style="display: none; width: 600px; padding-top: 50px"
+        >
+          <div>
+            <div id="progress" class="refinedText">0/24</div>
+            <div
+              id="question"
+              class="refinedText"
+              style="min-height: 150px"
+            ></div>
+            <div
+              id="doff"
+              class="textButton clickable"
+              onclick="nextScenario()"
+            >
+              Doff it
+            </div>
+            <div
+              id="doNotDoff"
+              class="textButton clickable"
+              onclick="nextScenario()"
+            >
+              Do not doff
+            </div>
+            <div id="doNothing" class="textButton" style="opacity: 0">
+              Do nothing
+            </div>
           </div>
         </div>
       </div>
