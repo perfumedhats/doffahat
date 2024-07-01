@@ -1,318 +1,60 @@
 // TODO - Fix how images come up during gameplay
 // TODO - More pictures
-// TODO - fix looping of music?
 // TODO - Downsample images
 // TODO - Expand the people and encounter lists
 // TODO - Code review
 // TODO - Put on-line
-var normalPerson = [
-  "a governess pushing a parambulator",
-  "an episcopal bishop",
-  "a soldier on leave",
-  "a lively costermonger",
-  "a constable making their rounds",
-  "a gentleman, with no hat",
-  "a woman in a wide-brimmed hat",
-  "Her Majesty",
-  "a prominent local politician",
-  "two journalists, having a conversation",
-  "a bishop in a mitre",
-  "a line of convicts",
-  "a knot of saucer-eyed waifs",
-  "a scullery maid, shouting 'gardyloo!'",
-  "a rather fetching strumpet",
-  "the viscount in a sedan chair",
-  "a sailor, eating fish heads and tails",
-];
-var normalEncounter = [
-  "you pass",
-  "you see",
-  "you are greeted by",
-  "you chance across",
-  "you are noticed by",
-];
-var weirdEncounter = normalEncounter.concat([
-  "you are winked at by",
-  "you exchange a knowing glance with",
-  "you reach for the same umbrella as",
-  "you accidentally stare too long at",
-]);
-var aftermathEncounter = [
-  "you are dimly aware of",
-  "you take no notice of",
-  "you are surrounded by",
-  "you press through",
-  "you fight past",
-  "you bump against",
-];
-var aftermathAtHomePerson = [
-  "a blur of hollow faces",
-  "a suffocating grey fog",
-  "a sudden stillness",
-];
-var aftermathPerson = aftermathAtHomePerson.concat([
-  "the gathering crowds",
-  "policemen shouting loudly",
-  "faceless bodies, gawking",
-]);
-var sadEncounter = [
-  "you stare vacantly at",
-  "you mumble something you immediately forget to",
-  "you try to ignore",
-  "you turn around to avoid the haunted eyes of",
-  "you do not notice",
-  "you think of",
-];
-var sadPerson = [
-  "the elder Mr. Tronk",
-  "Ernest's mother",
-  "one of Ernest's sisters",
-  "an endless stream of strangers",
-  "the formless shadows",
-  "the abyss",
-  "the silent, enveloping darkness",
-  "the hollow men, rats feet over broken glass in a dry cellar",
-  "a silent, unfeeling god",
-];
-var text = [
-  {
-    counter: 6,
-    allowImages: true,
-    preamble: [
-      "on the Sabbath",
-      "while hunting in Nantes",
-      "on your way to tiffin",
-      "during the first bowl of the over (at Wembley)",
-      "while carrying a cane and volume of Proust",
-      "ascending the steps of parliment",
-      "while reaching for your cigarette case",
-      "during tiffin on the Seine",
-      "at the green grocers",
-      "on the promenade",
-      "in the foyer of the office",
-      "while finding your seat at the opera",
-      "during the national anthem",
-      "during a lecture on Ovid",
-      "onboard Brunel's Great Eastern steamer",
-      "while smoking at the club",
-      "during your daily constitutional",
-      "while smoking a cheroot",
-    ],
-    encounter: normalEncounter,
-    person: normalPerson,
-  },
-  {
-    counter: 6,
-    allowImages: true,
-    showDoNothing: true,
-    preamble: [
-      "after a fit of the whistles",
-      "while waiting for a funicular",
-      "while entering a funicular",
-      "while exiting a funicular",
-      "walking along the quay",
-      "in a crowded funicular car",
-      "on the funicular platform",
-    ],
-    encounter: weirdEncounter,
-    person: [
-      "Her Majesty",
-      "il principe de Monaco",
-      "a Japanese salaryman",
-      "local fisherman Ernest Tronk",
-      "a prominent local fisherman",
-      "a procession of mourners",
-      "a gang of tattooed stevedors",
-      "a porter-bellied pintman",
-      "a very inebriated funicular repairman",
-      "Mr. Tronk, enjoying the morning air",
-      "shriftless churls gathered around a hurdy-gurdy",
-    ],
-  },
-  {
-    counter: 8,
-    allowImages: true,
-    preamble: [
-      "after a fit of the whistles",
-      "finding yourself daydreaming,",
-      "on the way to work",
-      "while waiting for a funicular",
-      "while entering a funicular",
-      "while exiting a funicular",
-      "at the docks",
-      "in a crowded funicular",
-      "in an empty funicular",
-      "at the funicular platform",
-      "in a tavern",
-      "while doffing your hat",
-      "while visiting the shipyard after-hours",
-      "during the funicular's slow descent",
-    ],
-    encounter: [
-      "you smile at",
-      "you exchange gossip with",
-      "you are pleased to see",
-      "you anticipate meeting",
-      "you are winked at by",
-      "you exchange a knowing glance with",
-      "you reach for the same umbrella as",
-      "you accidentally stare too long at",
-      "you bump into",
-      "you make eyes at",
-      "you jovially rib",
-    ],
-    person: [
-      "that roguish charmer Ernest, smelling of the sea",
-      "handsome local fisherman Ernest Tronk",
-      "prominent local fisherman Ernest Tronk",
-      "the salty old sea dog Ernest Tronk",
-      "mariner extraordinare, Ernest Tronk",
-      "a festive Ernest Tronk, dancing a reel",
-      "that irrepressible scallywag Ernest Tronk",
-      "one Ernest Tronk, a rapscallion of a herring trawler",
-      "Mr. Tronk, enjoying the morning air",
-      "that jocund fellow Ernest, up to his old tricks",
-      "paragon of bonhomie Ernest Tronk, laughing his salty laugh",
-      "Ernest Tronk, playing timeless shanties on his concertina",
-    ],
-  },
-  {
-    counter: 1,
-    preamble: ["arriving a minute too late for your funicular"],
-    encounter: weirdEncounter,
-    person: normalPerson,
-  },
-  {
-    counter: 1,
-    preamble: ["reaching the funicular platform just after the doors close"],
-    encounter: weirdEncounter,
-    person: normalPerson,
-  },
-  {
-    counter: 1,
-    preamble: ["stuck on the platform as everyone on begins to shout"],
-    encounter: ["you see"],
-    person: ["Ernest Tronk in the crowded funicular"],
-  },
-  {
-    counter: 1,
-    preamble: ["as the cable on the funicular snaps"],
-    encounter: ["you see"],
-    person: ["Ernest Tronk in the crowded funicular"],
-  },
-  {
-    counter: 1,
-    preamble: ["as the brakes on the funicular fail"],
-    encounter: ["you see"],
-    person: ["Ernest Tronk"],
-  },
-  {
-    counter: 1,
-    preamble: ["as the funicular jumps the tracks"],
-    encounter: ["you see"],
-    person: ["Ernest Tronk"],
-  },
-  {
-    counter: 1,
-    preamble: ["frantically looking for another way down the mountain"],
-    encounter: aftermathEncounter,
-    person: aftermathPerson,
-  },
-  {
-    counter: 1,
-    preamble: ["riding a stolen bicycle down to the foot of the mountain"],
-    encounter: aftermathEncounter,
-    person: aftermathPerson,
-  },
-  {
-    counter: 1,
-    preamble: ["upon reaching the bottom of the funicular"],
-    encounter: aftermathEncounter,
-    person: aftermathPerson,
-  },
-  {
-    counter: 1,
-    preamble: ["jumping over the police barricade"],
-    encounter: aftermathEncounter,
-    person: aftermathPerson,
-  },
-  {
-    counter: 1,
-    preamble: ["unsure how you got home"],
-    encounter: aftermathEncounter,
-    person: aftermathAtHomePerson,
-  },
-  {
-    counter: 1,
-    hideDoff: true,
-    preamble: ["as the mayor declares a day of mourning"],
-    encounter: sadEncounter,
-    person: sadPerson,
-  },
-  {
-    // funeral
-    counter: 7,
-    preamble: [
-      "at the funeral",
-      "after the funeral",
-      "walking alone at the wharf",
-      "riding to work in the new funicular",
-      "eating cold food",
-      "coughing at the grocery store",
-      "scraping toast into the sink",
-      "pulling your coat tighter against a cold wind",
-      "looking at the cracked skin on your hands",
-      "you go to bed early lest",
-    ],
-    encounter: sadEncounter,
-    person: sadPerson,
-  },
-];
-
-function disableButton(elementID) {
-  var element = document.getElementById(elementID);
-  element.style.opacity = 0;
-  element.classList.remove("clickable");
-  element.onclick = "";
-}
-
-function enableButton(elementID) {
-  var element = document.getElementById(elementID);
-  element.style.opacity = 1;
-  element.classList.add("clickable");
-  element.onclick = nextScenario;
-}
-
-var actNum = 0;
-var progress = 0;
-var endStateCounter = 0;
-var lastClick = 0;
 const DELAY = 200;
-
-var interruptions = [
-  1 + Math.floor(Math.random() * 6),
-  7 + Math.floor(Math.random() * 6),
-  13 + Math.floor(Math.random() * 6),
+const galleryImages = [
+  "costermonger.webp",
+  "gendarme.webp",
+  "priest.webp",
+  "rabbi.webp",
+  "roma.webp",
+  "slavs.webp",
+  "soldier.webp",
+  "tronk.webp",
+  "washerwoman.webp",
 ];
 
-var activeScreen = null;
-var started = false;
+var state = {
+  activeScreen: null,
+  started: false,
+  actNum: 0,
+  progress: 0,
+  endStateCounter: 0,
+  lastClick: 0,
+  scenario: "",
 
+  // The index at which the progress bar starts to fade
+  progressFadeIndex: null,
+
+  // The progress points at which the CAREFUL alert will be displayed
+  interruptions: [
+    1 + Math.floor(Math.random() * 6),
+    7 + Math.floor(Math.random() * 6),
+    13 + Math.floor(Math.random() * 6),
+  ],
+  audio: null,
+};
+
+document.addEventListener("DOMContentLoaded", initialize);
 function initialize() {
-  changeToScreen("screen1");
+  preloadImages();
+  changeToScreen("screenIntro");
 }
+
 function startGame(e) {
   // Prevent the user from clicking the checkbox twice
-  if (started) {
+  if (state.started) {
     e.preventDefault();
     e.stopPropagation();
     return;
   }
-  started = true;
-
-  var audio = new Audio("chopin-waltz-e-minor.mp3");
-  audio.loop = true;
-  audio.play();
+  state.started = true;
+  startAudio();
+  updateScenario();
+  syncUI();
   showImage();
 }
 
@@ -320,15 +62,15 @@ function showImage() {
   document.getElementById("gallery").src = _.sample(galleryImages, 1)[0];
   changeToScreen("screenGallery", function () {
     setTimeout(function () {
-      changeToScreen("screenQuestions", nextScenario);
+      changeToScreen("screenQuestions");
     }, 2000);
   });
 }
 
 function changeToScreen(id, callback) {
-  if (activeScreen) {
-    activeScreen.classList.remove("fade-in");
-    activeScreen.classList.add("fade-out");
+  if (state.activeScreen) {
+    state.activeScreen.classList.remove("fade-in");
+    state.activeScreen.classList.add("fade-out");
     setTimeout(fadeIn.bind(this, id, callback), 2000);
   } else {
     fadeIn(id, callback);
@@ -336,121 +78,60 @@ function changeToScreen(id, callback) {
 }
 
 function fadeIn(id, callback) {
-  if (activeScreen) {
-    activeScreen.style.display = "none";
+  if (state.activeScreen) {
+    state.activeScreen.style.display = "none";
   }
-  activeScreen = document.getElementById(id);
-  activeScreen.style.display = "flex";
-  activeScreen.classList.remove("fade-out");
-  activeScreen.classList.add("fade-in");
+  state.activeScreen = document.getElementById(id);
+  state.activeScreen.style.display = "flex";
+  state.activeScreen.classList.remove("fade-out");
+  state.activeScreen.classList.add("fade-in");
   if (callback) callback();
 }
 
-var galleryImages = [
-  "priest.webp",
-  "rabbi.webp",
-  "slavs.webp",
-  "soldier.webp",
-  "costermonger.webp",
-  "gendarme.webp",
-  "tronk.webp",
-];
-
-// Preload the images
-galleryImages.forEach((url) => {
-  var img = new Image();
-  img.src = url;
-});
-
-function nextScenario() {
+function clickAction() {
   // Don't allow clicking more than once a second
   // otherwise mucksavage bogmen click too fast and miss the game
   var time = Date.now();
-  if (time - lastClick < DELAY) {
+  if (time - state.lastClick < DELAY) {
     return;
   }
-  lastClick = time;
+  state.lastClick = time;
 
-  var act = text[actNum];
+  nextScenario();
+}
 
-  if (interruptions.includes(progress)) {
+function nextScenario() {
+  state.progress++;
+  var act = story.acts[state.actNum];
+  if (act.callback) callback();
+  if (state.interruptions.includes(state.progress)) {
     alert("CAREFUL!");
   }
 
-  if (!act) {
-    endStateCounter++;
-    updateText(endStateCounter % 2 ? "You wake up" : "You go to sleep");
-
-    if (endStateCounter > 3 && endStateCounter <= 10) {
-      var step = 1 / (10 - 3);
-      document.body.style.opacity = 1 - step * (endStateCounter - 3);
-    }
-    if (endStateCounter === 10) {
-      document.body.innerHTML = "";
-    }
-
-    return;
-  }
-
   act.counter--;
-  if (act.counter === 0) actNum++;
+  if (act.counter === 0) state.actNum++;
 
-  progress++;
-  var progressEl = document.getElementById("progress");
-  progressEl.textContent = progress + "/29";
-  if (progress > 21 && progress <= 26) {
-    var step = 1 / (26 - 21);
-    progressEl.style.opacity = 1 - step * (progress - 21);
-  }
+  updateScenario();
+  syncUI();
 
-  if (act.showDoNothing) {
-    act.showDoNothing = false;
-    enableButton("doNothing");
-  }
-
-  if (act.hideDoff) {
-    act.hideDoff = false;
-    disableButton("doff");
-    disableButton("doNotDoff");
-  }
-
-  // Generate a new question that is different from the current question
-  var questionEl = document.getElementById("question");
-  var newText = generateSentence(act);
-  while (questionEl.textContent === newText) {
-    newText = generateSentence(act);
-  }
-
-  if (
-    !interruptions.includes(progress) &&
-    act.allowImages &&
-    Math.floor(Math.random() * 10) === 0
-  ) {
-    showImage();
-  } else {
-    updateText(newText);
-  }
+  // if (
+  //   !state.interruptions.includes(state.progress) &&
+  //   act.allowImages &&
+  //   Math.floor(Math.random() * 1) === 0
+  // ) {
+  //   showImage();
+  // } else {
+  //   syncUI();
+  // }
 }
 
-var generateSentence = function (act) {
-  return [act.preamble, act.encounter, act.person]
-    .map(_.sample)
-    .join(" ")
-    .trim()
-    .replace(/^./, function (text) {
-      return text.toUpperCase();
-    });
-};
-
-document.addEventListener("DOMContentLoaded", initialize);
-
-function updateText(text) {
+function updateText() {
   var questionEl = document.getElementById("question");
   questionEl.classList.remove("fade-in");
   questionEl.classList.add("fade-out");
   setTimeout(
     function () {
-      questionEl.textContent = text;
+      questionEl.textContent = state.scenario;
       questionEl.classList.remove("fade-out");
       questionEl.classList.add("fade-in");
     },

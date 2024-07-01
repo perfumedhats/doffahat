@@ -9,6 +9,8 @@
     />
     <!-- Music from https://pixabay.com/music/classical-piano-chopin-waltz-in-e-minor-b-56-kk-iva-15-190237/ -->
     <script src="doff.js"></script>
+    <script src="story.js"></script>
+    <script src="utilities.js"></script>
     <script src="underscore-min.js"></script>
     <link rel="stylesheet" href="/html/main.css" />
 
@@ -77,7 +79,7 @@
     <div style="display: flex; justify-content: center">
       <div>
         <div
-          id="screen1"
+          id="screenIntro"
           class="refinedText"
           style="line-height: 50px; display: none; padding: 25px"
         >
@@ -139,17 +141,13 @@
               class="refinedText"
               style="min-height: 150px"
             ></div>
-            <div
-              id="doff"
-              class="textButton clickable"
-              onclick="nextScenario()"
-            >
+            <div id="doff" class="textButton clickable" onclick="clickAction()">
               Doff it
             </div>
             <div
               id="doNotDoff"
               class="textButton clickable"
-              onclick="nextScenario()"
+              onclick="clickAction()"
             >
               Do not doff
             </div>
