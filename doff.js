@@ -26,8 +26,11 @@ var state = {
   lastClick: 0,
   scenario: "",
 
-  // The index at which the progress bar starts to fade
-  progressFadeIndex: null,
+  station: null,
+  direction: Math.random() >= 0.2 ? 1 : -1,
+
+  // The index at which the status bar starts to fade
+  statusFadeIndex: null,
 
   // The progress points at which the CAREFUL alert will be displayed
   interruptions: [
@@ -51,6 +54,10 @@ function startGame(e) {
     e.stopPropagation();
     return;
   }
+
+  // Yeoman is the neutral starting point
+  state.station = stations.indexOf("yeoman") + Math.random() * 21 - 10;
+
   state.started = true;
   startAudio();
   updateScenario();
@@ -59,7 +66,7 @@ function startGame(e) {
 }
 
 function showImage() {
-  document.getElementById("gallery").src = _.sample(galleryImages, 1)[0];
+  document.getElementById("gallery").src = _.sample(galleryImages);
   changeToScreen("screenGallery", function () {
     setTimeout(function () {
       changeToScreen("screenQuestions");
@@ -103,9 +110,20 @@ function clickAction() {
 function nextScenario() {
   state.progress++;
   var act = story.acts[state.actNum];
-  if (act.callback) callback();
+  if (act.callback) act.callback();
   if (state.interruptions.includes(state.progress)) {
-    alert("CAREFUL!");
+    showWarning();
+    // TODO this can trigger another warning
+    // TODO can this get a color?
+    // TODO Have the music fade out so it's obviously intentional
+    // TODO the fading out of the progress is a bit janky, can it be smoothed over more steps?
+    // TODO stop the SPLENDID ETIQUETTE alerts after ernest's freefall starts
+    updateStation();
+  } else if (Math.random() <= 0.4) {
+    // Update the station unless Ernest is in freefall
+    if (typeof state.statusFadeIndex !== "number") {
+      updateStation();
+    }
   }
 
   act.counter--;

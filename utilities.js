@@ -13,15 +13,20 @@ function syncUI() {
 
   var progressEl = document.getElementById("progress");
   progressEl.textContent = state.progress + "/29";
-  if (typeof state.progressFadeIndex === "number") {
+  if (typeof state.statusFadeIndex === "number") {
     var steps = 5;
-    var stage = state.progress - state.progressFadeIndex;
+    var stage = state.progress - state.statusFadeIndex;
     var step = 1 / steps;
-    progressEl.style.opacity = 1 - step * stage;
-    if (progressEl.style.opacity <= 0) {
-      state.progressFadeIndex = null;
+    var statusBar = document.getElementById("statusBar");
+    statusBar.style.opacity = 1 - step * stage;
+    if (statusBar.style.opacity <= 0) {
+      state.statusFadeIndex = null;
     }
   }
+
+  var stationEl = document.getElementById("station");
+  stationEl.textContent =
+    "Your Station: " + stations[Math.round(state.station)];
 
   if (act.showDoNothing) {
     act.showDoNothing = false;
@@ -75,4 +80,54 @@ function updateScenario() {
       });
   }
   state.scenario = newSentence;
+}
+
+// Standard Normal variate using Box-Muller transform.
+// From https://stackoverflow.com/a/36481059
+function gaussianRandom({ mean = 0, stdev = 1, min, max }) {
+  const u = 1 - Math.random(); // Converting [0,1) to (0,1]
+  const v = Math.random();
+  const z = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+  // Transform to the desired mean and standard deviation:
+  let value = z * stdev + mean;
+
+  if (min !== undefined) {
+    value = Math.max(min, value);
+  }
+  if (max !== undefined) {
+    value = Math.min(max, value);
+  }
+
+  return value;
+}
+
+function showWarning() {
+  if (Math.random() <= 0.25) {
+    alert("CAREFUL!");
+  } else if (Math.random() <= 0.5) {
+    alert(
+      "Your " +
+        _.sample(observers.attributes) +
+        " has been " +
+        _.sample(observers.verbs) +
+        " by " +
+        _.sample(observers.people)
+    );
+  } else {
+    alert("Embarrased, you resolve to be more thoughtful");
+  }
+}
+
+function updateStation() {
+  if (Math.random() > 0.25) {
+    state.station += state.direction * Math.random() * 3;
+  } else if (Math.random() > 0.125) {
+    alert("SPLENDID ETIQUETTE!");
+    state.station += 5 + Math.random() * 5;
+  } else {
+    alert(
+      "Tragically, your lapse was noticed by " + _.sample(observers.people)
+    );
+    state.station -= 5 + Math.random() * 5;
+  }
 }
