@@ -1,3 +1,4 @@
+// TODO - If you get to the final station, it should handle this somehow
 // TODO - Fix how images come up during gameplay
 // TODO - More pictures
 // TODO - Downsample images
@@ -25,19 +26,15 @@ var state = {
   endStateCounter: 0,
   lastClick: 0,
   scenario: "",
+  afterAccident: false,
 
   station: null,
+  // The index of yeoman. The 0 value above which stations are good, and below which they are bad
+  stationMidpoint: null,
   direction: Math.random() >= 0.2 ? 1 : -1,
 
   // The index at which the status bar starts to fade
   statusFadeIndex: null,
-
-  // The progress points at which the CAREFUL alert will be displayed
-  interruptions: [
-    1 + Math.floor(Math.random() * 6),
-    7 + Math.floor(Math.random() * 6),
-    13 + Math.floor(Math.random() * 6),
-  ],
   audio: null,
 };
 
@@ -56,7 +53,9 @@ function startGame(e) {
   }
 
   // Yeoman is the neutral starting point
-  state.station = stations.indexOf("yeoman") + Math.random() * 21 - 10;
+  state.stationMidpoint = stations.indexOf("yeoman");
+  // Start most likely below yeoman
+  state.station = state.stationMidpoint + Math.random() * 15 - 10;
 
   state.started = true;
   startAudio();
@@ -109,20 +108,18 @@ function clickAction() {
 
 function nextScenario() {
   state.progress++;
-  var act = story.acts[state.actNum];
+  let act = story.acts[state.actNum];
   if (act.callback) act.callback();
-  if (state.interruptions.includes(state.progress)) {
-    showWarning();
-    // TODO this can trigger another warning
-    // TODO can this get a color?
-    // TODO Have the music fade out so it's obviously intentional
-    // TODO the fading out of the progress is a bit janky, can it be smoothed over more steps?
-    // TODO stop the SPLENDID ETIQUETTE alerts after ernest's freefall starts
-    updateStation();
-  } else if (Math.random() <= 0.4) {
-    // Update the station unless Ernest is in freefall
-    if (typeof state.statusFadeIndex !== "number") {
-      updateStation();
+  if (!state.afterAccident) {
+    const capriciousFate = Math.random();
+    if (capriciousFate < 4 / 6) {
+      state.station += state.direction * Math.random() * 3;
+    } else if (capriciousFate < 5 / 6) {
+      showAccolade();
+      state.station += 5 + Math.random() * 5;
+    } else {
+      showWarning();
+      state.station -= 5 + Math.random() * 5;
     }
   }
 
@@ -133,7 +130,6 @@ function nextScenario() {
   syncUI();
 
   // if (
-  //   !state.interruptions.includes(state.progress) &&
   //   act.allowImages &&
   //   Math.floor(Math.random() * 1) === 0
   // ) {

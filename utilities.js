@@ -2,12 +2,12 @@ function syncUI() {
   var act = story.acts[state.actNum];
   updateText();
   if (act.isEndgame) {
-    if (state.endStateCounter > 3 && state.endStateCounter <= 10) {
-      var step = 1 / (10 - 3);
-      document.body.style.opacity = 1 - step * (state.endStateCounter - 3);
+    if (act.counter <= 8) {
+      document.body.style.opacity = (act.counter - 1) / 7;
     }
-    if (state.endStateCounter === 10) {
+    if (act.counter === 1) {
       document.body.innerHTML = "";
+      return;
     }
   }
 
@@ -25,8 +25,8 @@ function syncUI() {
   }
 
   var stationEl = document.getElementById("station");
-  stationEl.textContent =
-    "Your Station: " + stations[Math.round(state.station)];
+  stationEl.textContent = stations[Math.round(state.station)];
+  stationEl.style.color = stationColor();
 
   if (act.showDoNothing) {
     act.showDoNothing = false;
@@ -101,33 +101,48 @@ function gaussianRandom({ mean = 0, stdev = 1, min, max }) {
   return value;
 }
 
-function showWarning() {
-  if (Math.random() <= 0.25) {
-    alert("CAREFUL!");
-  } else if (Math.random() <= 0.5) {
-    alert(
-      "Your " +
-        _.sample(observers.attributes) +
-        " has been " +
-        _.sample(observers.verbs) +
-        " by " +
-        _.sample(observers.people)
-    );
+function showAccolade() {
+  const capriciousFate = Math.random();
+  if (capriciousFate < 0.5) {
+    showVerboseAlert(true);
   } else {
-    alert("Embarrased, you resolve to be more thoughtful");
+    alert("SPLENDID ETIQUETTE!");
   }
 }
 
-function updateStation() {
-  if (Math.random() > 0.25) {
-    state.station += state.direction * Math.random() * 3;
-  } else if (Math.random() > 0.125) {
-    alert("SPLENDID ETIQUETTE!");
-    state.station += 5 + Math.random() * 5;
+function showWarning() {
+  const capriciousFate = Math.random();
+  if (capriciousFate < 0.5) {
+    showVerboseAlert(false);
   } else {
     alert(
-      "Tragically, your lapse was noticed by " + _.sample(observers.people)
+      _.sample(["Embarrased, you resolve to be more thoughtful", "CAREFUL!"])
     );
-    state.station -= 5 + Math.random() * 5;
   }
+}
+
+function showVerboseAlert(isGood) {
+  alert(
+    (isGood ? "Your " : "Tragically, your ") +
+      _.sample(observers.attributes) +
+      " has been " +
+      _.sample(observers.verbs) +
+      " by " +
+      _.sample(observers.people)
+  );
+}
+
+function stationColor() {
+  const standing = state.station - state.stationMidpoint,
+    // How far from neutral you can go
+    maxGood = stations.length - state.stationMidpoint - 1,
+    maxBad = state.stationMidpoint,
+    // A percentage
+    relativeStanding = standing > 0 ? standing / maxGood : standing / maxBad,
+    hue = standing > 0 ? 120 : 0;
+
+  // 42 is the maximum luminocity that looks good
+  return (
+    "hsl(" + hue + ", 100%, " + (10 + 32 * Math.abs(relativeStanding)) + "%)"
+  );
 }
