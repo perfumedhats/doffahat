@@ -64,10 +64,13 @@ function startGame(e) {
   showImage();
 }
 
-function showImage() {
+function showImage(callback) {
   document.getElementById("gallery").src = _.sample(galleryImages);
   changeToScreen("screenGallery", function () {
     setTimeout(function () {
+      if (callback) {
+        callback();
+      }
       changeToScreen("screenQuestions");
     }, 2000);
   });
@@ -109,34 +112,48 @@ function clickAction() {
 function nextScenario() {
   state.progress++;
   let act = story.acts[state.actNum];
+  let displayedAlert = false;
   if (act.callback) act.callback();
   if (!state.afterAccident) {
     const capriciousFate = Math.random();
+    let delta;
     if (capriciousFate < 4 / 6) {
-      state.station += state.direction * Math.random() * 3;
+      delta = state.direction * Math.random() * 3;
     } else if (capriciousFate < 5 / 6) {
-      showAccolade();
-      state.station += 5 + Math.random() * 5;
+      delta = 5 + Math.random() * 5;
     } else {
-      showWarning();
-      state.station -= 5 + Math.random() * 5;
+      delta = -1 * 5 + Math.random() * 5;
     }
+
+    if (state.station + delta < 0) {
+      delta = 15 + Math.random() * 5;
+    } else if (state.station + delta > stations.length - 1) {
+      delta = 15 + Math.random() * 5;
+    }
+
+    if (delta > 4) {
+      showAccolade();
+      displayedAlert = true;
+    } else if (delta < -4) {
+      showWarning();
+      displayedAlert = true;
+    }
+
+    state.station += delta;
   }
 
   act.counter--;
   if (act.counter === 0) state.actNum++;
 
   updateScenario();
-  syncUI();
 
-  // if (
-  //   act.allowImages &&
-  //   Math.floor(Math.random() * 1) === 0
-  // ) {
-  //   showImage();
-  // } else {
-  //   syncUI();
-  // }
+  if (act.allowImages && !displayedAlert && Math.random() < 0.33) {
+    showImage(function () {
+      syncUI();
+    });
+  } else {
+    syncUI();
+  }
 }
 
 function updateText() {
