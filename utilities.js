@@ -60,8 +60,17 @@ function startAudio() {
   state.audio.play();
 }
 
+function fadeAudio() {
+  state.audio.volume = Math.max(0, state.audio.volume - 0.1);
+  if (state.audio.volume <= 0) {
+    state.audio.pause();
+  } else {
+    setTimeout(fadeAudio, 40);
+  }
+}
+
 function preloadImages() {
-  galleryImages.forEach((url) => {
+  state.galleryImages.forEach((url) => {
     var img = new Image();
     img.src = url;
   });

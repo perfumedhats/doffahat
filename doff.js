@@ -6,17 +6,6 @@
 // TODO - Code review
 // TODO - Put on-line
 const DELAY = 200;
-const galleryImages = [
-  "costermonger.webp",
-  "gendarme.webp",
-  "priest.webp",
-  "rabbi.webp",
-  "roma.webp",
-  "slavs.webp",
-  "soldier.webp",
-  "tronk.webp",
-  "washerwoman.webp",
-];
 
 var state = {
   activeScreen: null,
@@ -27,7 +16,7 @@ var state = {
   lastClick: 0,
   scenario: "",
   afterAccident: false,
-
+  galleryImages: [],
   station: null,
   // The index of yeoman. The 0 value above which stations are good, and below which they are bad
   stationMidpoint: null,
@@ -40,6 +29,25 @@ var state = {
 
 document.addEventListener("DOMContentLoaded", initialize);
 function initialize() {
+  state.galleryImages = _.shuffle([
+    "costermonger.webp",
+    "gendarme.webp",
+    "priest.webp",
+    "rabbi.webp",
+    "roma.webp",
+    "slavs.webp",
+    "soldier.webp",
+    "tronk.webp",
+    "washerwoman.webp",
+  ]);
+
+  // This number must line up with the CSS media selector.
+  // The funicular image from the intro isn't shown if the screen is too narrow,
+  // so make it the first image
+  if (window.innerWidth < 1100) {
+    state.galleryImages.push("funicular.png");
+  }
+
   preloadImages();
   changeToScreen("screenIntro");
 }
@@ -65,7 +73,10 @@ function startGame(e) {
 }
 
 function showImage(callback) {
-  document.getElementById("gallery").src = _.sample(galleryImages);
+  if (!state.galleryImages.length) {
+    callback();
+  }
+  document.getElementById("gallery").src = state.galleryImages.pop();
   changeToScreen("screenGallery", function () {
     setTimeout(function () {
       if (callback) {
@@ -78,9 +89,9 @@ function showImage(callback) {
 
 function changeToScreen(id, callback) {
   if (state.activeScreen) {
-    state.activeScreen.classList.remove("fade-in");
-    state.activeScreen.classList.add("fade-out");
-    setTimeout(fadeIn.bind(this, id, callback), 2000);
+    state.activeScreen.classList.remove("fade-in-quick");
+    state.activeScreen.classList.add("fade-out-quick");
+    setTimeout(fadeIn.bind(this, id, callback), 1000);
   } else {
     fadeIn(id, callback);
   }
@@ -92,8 +103,8 @@ function fadeIn(id, callback) {
   }
   state.activeScreen = document.getElementById(id);
   state.activeScreen.style.display = "flex";
-  state.activeScreen.classList.remove("fade-out");
-  state.activeScreen.classList.add("fade-in");
+  state.activeScreen.classList.remove("fade-out-quick");
+  state.activeScreen.classList.add("fade-in-quick");
   if (callback) callback();
 }
 
@@ -148,9 +159,7 @@ function nextScenario() {
   updateScenario();
 
   if (act.allowImages && !displayedAlert && Math.random() < 0.33) {
-    showImage(function () {
-      syncUI();
-    });
+    showImage(syncUI);
   } else {
     syncUI();
   }

@@ -191,7 +191,7 @@ story.acts = [
     counter: 1,
     callback: function () {
       state.statusFadeIndex = state.progress;
-      state.audio.pause();
+      fadeAudio();
       state.afterAccident = true;
     },
     preamble: ["stuck on the platform as everyone on begins to shout"],
@@ -372,7 +372,6 @@ const stations = [
   "freeman",
   "yeoman",
   "granger",
-  "thane",
   "artisan",
   "page",
   "valet",
