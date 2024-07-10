@@ -5,7 +5,7 @@
 // TODO - Expand the people and encounter lists
 // TODO - Code review
 // TODO - Put on-line
-const DELAY = 200;
+const DELAY = 1500;
 
 var state = {
   activeScreen: null,
@@ -31,6 +31,7 @@ document.addEventListener("DOMContentLoaded", initialize);
 function initialize() {
   state.galleryImages = _.shuffle([
     "costermonger.webp",
+    "doctor.webp",
     "gendarme.webp",
     "priest.webp",
     "rabbi.webp",
@@ -45,7 +46,7 @@ function initialize() {
   // The funicular image from the intro isn't shown if the screen is too narrow,
   // so make it the first image
   if (window.innerWidth < 1100) {
-    state.galleryImages.push("funicular.png");
+    state.galleryImages.push("funicular.webp");
   }
 
   preloadImages();
@@ -83,7 +84,7 @@ function showImage(callback) {
         callback();
       }
       changeToScreen("screenQuestions");
-    }, 2000);
+    }, 2500);
   });
 }
 
@@ -159,13 +160,13 @@ function nextScenario() {
   updateScenario();
 
   if (act.allowImages && !displayedAlert && Math.random() < 0.33) {
-    showImage(syncUI);
+    showImage(syncUI.bind(this, true));
   } else {
     syncUI();
   }
 }
 
-function updateText() {
+function updateText(noDelay) {
   var questionEl = document.getElementById("question");
   questionEl.classList.remove("fade-in");
   questionEl.classList.add("fade-out");
@@ -175,6 +176,6 @@ function updateText() {
       questionEl.classList.remove("fade-out");
       questionEl.classList.add("fade-in");
     },
-    questionEl.innerHTML === "" ? 0 : DELAY
+    noDelay || questionEl.innerHTML === "" ? 0 : DELAY
   );
 }

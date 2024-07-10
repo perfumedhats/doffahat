@@ -1,6 +1,6 @@
-function syncUI() {
+function syncUI(noDelay) {
   var act = story.acts[state.actNum];
-  updateText();
+  updateText(noDelay);
   if (act.isEndgame) {
     if (act.counter <= 8) {
       document.body.style.opacity = (act.counter - 1) / 7;
@@ -12,7 +12,7 @@ function syncUI() {
   }
 
   var progressEl = document.getElementById("progress");
-  progressEl.textContent = state.progress + "/29";
+  progressEl.textContent = state.progress + "/30";
   if (typeof state.statusFadeIndex === "number") {
     var steps = 5;
     var stage = state.progress - state.statusFadeIndex;

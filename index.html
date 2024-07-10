@@ -25,7 +25,6 @@
       }
       .refinedText {
         font-family: Cormorant Garamond, cursive;
-        font-size: xx-large;
         margin-bottom: 30px;
       }
       .textButton {
@@ -35,7 +34,6 @@
         cursor: default;
 
         font-family: IM Fell DW Pica, cursive;
-        font-size: xx-large;
 
         transition: opacity 3s ease-in;
 
@@ -74,9 +72,49 @@
         }
       }
 
+      .column {
+        padding: 50px 15px;
+      }
+
       @media (max-width: 1100px) {
         #introFunicular {
           display: none;
+        }
+        .watercolor {
+          width: 100vw;
+        }
+        .refinedText {
+          font-size: 50px;
+          line-height: 70px;
+        }
+        .textButton {
+          font-size: 50px;
+        }
+        .column {
+          width: 95%;
+        }
+      }
+      @media (min-width: 1101px) {
+        .watercolor {
+          width: auto;
+          height: calc(100vh - 50px);
+          padding-right: 50px;
+        }
+        #screenIntro {
+          padding: 25px;
+        }
+        #screenGallery {
+          padding: 25px;
+        }
+        .refinedText {
+          font-size: xx-large;
+          line-height: 50px;
+        }
+        .textButton {
+          font-size: xx-large;
+        }
+        .column {
+          width: 600px;
         }
       }
     </style>
@@ -84,18 +122,10 @@
   <body>
     <div style="display: flex; justify-content: center">
       <div>
-        <div
-          id="screenIntro"
-          class="refinedText"
-          style="line-height: 50px; display: none; padding: 25px"
-        >
-          <img
-            id="introFunicular"
-            src="funicular.png"
-            style="width: auto; height: calc(100vh - 50px)"
-          />
+        <div id="screenIntro" class="refinedText" style="display: none">
+          <img id="introFunicular" src="funicular.webp" class="watercolor" />
 
-          <div style="max-width: 600px; padding-left: 50px">
+          <div class="column">
             <div>
               <span style="font-size: 60px; color: #a10000">T</span>o the
               mountain cities of central Europe, adventurers come from across
@@ -130,17 +160,10 @@
             </form>
           </div>
         </div>
-        <div id="screenGallery" style="padding: 25px; display: none">
-          <img
-            id="gallery"
-            src="priest.webp"
-            style="width: auto; height: calc(100vh - 50px)"
-          />
+        <div id="screenGallery" style="display: none">
+          <img id="gallery" src="priest.webp" class="watercolor" />
         </div>
-        <div
-          id="screenQuestions"
-          style="display: none; width: 600px; padding-top: 50px"
-        >
+        <div id="screenQuestions" class="column" style="display: none">
           <div>
             <div id="statusBar" style="display: flex">
               <div id="progress" class="refinedText" style="width: 5em"></div>
