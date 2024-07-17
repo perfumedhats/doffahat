@@ -17,6 +17,8 @@ story.normalPerson = [
   "a scullery maid, shouting 'gardyloo!'",
   "a rather fetching strumpet",
   "the viscount in a sedan chair",
+  "a flagellating pilgrim",
+  "a pilloried theif",
   "a sailor, eating fish heads and tails",
   "an armed janissary in a turban",
   "the rear admiral in dress uniform",
