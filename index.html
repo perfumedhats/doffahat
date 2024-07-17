@@ -76,12 +76,16 @@
         padding: 50px 15px;
       }
 
+      /* Mobile */
       @media (max-width: 1100px) {
+        #question {
+          min-height: 20vh;
+        }
         #introFunicular {
           display: none;
         }
         .watercolor {
-          width: 100vw;
+          height: 100vh;
         }
         .refinedText {
           font-size: 50px;
@@ -94,7 +98,12 @@
           width: 95%;
         }
       }
+
+      /* Desktop */
       @media (min-width: 1101px) {
+        #question {
+          min-height: 150px;
+        }
         .watercolor {
           width: auto;
           height: calc(100vh - 50px);
@@ -175,7 +184,6 @@
             <div
               id="question"
               class="refinedText"
-              style="min-height: 150px"
             ></div>
             <div id="doff" class="textButton clickable" onclick="clickAction()">
               Doff it
