@@ -30,7 +30,6 @@ var state = {
 document.addEventListener("DOMContentLoaded", initialize);
 function initialize() {
   state.galleryImages = _.shuffle([
-    "costermonger.webp",
     "doctor.webp",
     "gendarme.webp",
     "priest.webp",
