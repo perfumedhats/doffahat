@@ -25,7 +25,7 @@ function syncUI(noDelay) {
   }
 
   var stationEl = document.getElementById("station");
-  stationEl.textContent = stations[Math.round(state.station)];
+  stationEl.textContent = capitalize(stations[Math.round(state.station)]);
   stationEl.style.color = stationColor();
 
   if (act.showDoNothing) {
@@ -80,15 +80,19 @@ function updateScenario() {
   var act = story.acts[state.actNum];
   var newSentence = state.scenario;
   while (newSentence === state.scenario) {
-    newSentence = [act.preamble, act.encounter, act.person]
+    newSentence = capitalize([act.preamble, act.encounter, act.person]
       .map(_.sample)
       .join(" ")
-      .trim()
-      .replace(/^./, function (text) {
-        return text.toUpperCase();
-      });
+      .trim())
   }
   state.scenario = newSentence;
+}
+
+// Capitalizes the first letter
+function capitalize(text) {
+  return text.replace(/^./, function (text) {
+    return text.toUpperCase();
+  });
 }
 
 // Standard Normal variate using Box-Muller transform.

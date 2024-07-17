@@ -3,6 +3,7 @@ story.normalPerson = [
   "a governess pushing a parambulator",
   "an episcopal bishop",
   "a soldier on leave",
+  "soldiers on parade",
   "a lively costermonger",
   "a constable making their rounds",
   "a gentleman, with no hat",
